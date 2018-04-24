@@ -6,3 +6,7 @@ __pycache__
 .idea/
 tests/.cache/v/cache/lastfailed
 .cache/v/cache/lastfailed
+.udacity-pa
+
+cargo_planning-[0-9]*.zip
+cargo_planning-result-[0-9]*.zip
