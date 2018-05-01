@@ -111,8 +111,8 @@ class AirCargoProblem(Problem):
         """
         possible_actions = []
         kb = PropKB()   ## Propositional Knowledge Base
-        kb.tell(decode_state(state, self.state_map).pos_sentence()) ## Extract all "true" or +ve state literals from state map and store them in kb
-        for action in self.actions_list: ## For every available action
+        kb.tell(decode_state(state, self.state_map).pos_sentence())    ## Extract all "true" or +ve state literals from state map and store them in kb
+        for action in self.actions_list:    ## For every available action
             is_possible = True
             for clause in action.precond_pos:   ## Check if positive preconditions are in the list of true literals in kb
                 if clause not in kb.clauses:
@@ -121,7 +121,7 @@ class AirCargoProblem(Problem):
                 if clause in kb.clauses:
                     is_possible = False
             if is_possible:
-                possible_actions.append(action)
+                possible_actions.append(action)    ## Only if both conditions are true, the action is possible
         return possible_actions
 
     def result(self, state: str, action: Action):
@@ -137,16 +137,16 @@ class AirCargoProblem(Problem):
         old_state = decode_state(state, self.state_map) ## Extract the old state
         for fluent in old_state.pos:
             if fluent not in action.effect_rem:
-                new_state.pos.append(fluent)
+                new_state.pos.append(fluent)    ## Append +ve fluents from old state that don't require removal
         for fluent in action.effect_add:
             if fluent not in new_state.pos:
-                new_state.pos.append(fluent)
+                new_state.pos.append(fluent)    ## Append +ve fluents from old state that require addition
         for fluent in old_state.neg:
             if fluent not in action.effect_add:
-                new_state.neg.append(fluent)
+                new_state.neg.append(fluent)    ## Refer to comments above but with -ve fluents
         for fluent in action.effect_rem:
             if fluent not in new_state.neg:
-                new_state.neg.append(fluent)
+                new_state.neg.append(fluent)    ## Refer to comments above but with -ve fluents
         return encode_state(new_state, self.state_map)  ## Encode the new state
 
     def goal_test(self, state: str) -> bool:
@@ -190,7 +190,7 @@ class AirCargoProblem(Problem):
         count = 0
         kb = PropKB()
         kb.tell(decode_state(node.state, self.state_map).pos_sentence())
-        for clause in self.goal:    ## by removing all preconds, every action will always be applicable, any literal can be achieved in one step
+        for clause in self.goal:    ## By removing all preconds, every action will always be applicable, any literal can be achieved in one step
             count += 1
         return count
 
